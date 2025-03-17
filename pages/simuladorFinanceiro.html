@@ -24,7 +24,7 @@
     <br><br>
 
     <h2> QUAL O CUSTO DIÁRIO MÉDIO DE INTERNAÇÃO ?</h2>
-    <input type="number" id="input_temp_internacao">
+    <input type="number" id="input_custo_internacao">
     <br><br>
 
     <button onclick="result()"> VER QUANTO ESTOU PERDENDO</button>
@@ -36,24 +36,30 @@
 </html>
 
 <script>
+//dados fornecidos
     // define o nome do hospital
     var nome ='';
+
     //dados medios de pacientes em hosp. gerais
     var qtd_pacientes = 0;
 
+    //dados de internacao
+    var tempo_internacao = 0;
+    var custo_internacao = 0;
+
+
+//dados pesquisados
     //dados medios de porcentagem de contaminação por IRA
     var riscoMin = 0;
     var riscoMax = 0;
 
-    // calculo de custos sem IRA
-    var custoMedioInternacao = 0
-    var diasMedioInternacao = 0;
-    var valorTotal = custoMedioInternacao * diasMedioInternacao;
 
-    //calculo de custo COM IRA
-    var custoMedioInternacaoIRA = 0;
-    var diasMedioInternacaoIRA = 0;
-    var valorTotalIRA = custoMedioInternacaoIRA * diasMedioInternacaoIRA;
+//dados calculados
+    //calculos de custos com e sem IRAS
+    var valorTotal = custo_internacao * tempo_internacao;
+    var valorMinIRA = custo_internacao * ( tempo_internacao + 2) ; //infecção do trato urinário (ITU), uma das IRAS mais comum e traqnuilas (2 a 4 dias de inetrnação + custos extras)
+    var valorMaxIRA = custo_internacao * ( tempo_internacao + 15) ; //Pneumonia associada à ventilação mecânica (PAV), umas das IRAS mais graves que traz altas taxas de mortalidade e custos (10 a 15+ dias + custos extras)
+
 
     //calculos de custos minimos com e sem IRA
     var custoMinSemIRA =  (pacienteMin*riscoMin) * valorTotal;
@@ -65,37 +71,33 @@
     var custoMaxComIRA = (pacienteMax*riscoMax) * valorTotalIRA;
     var diferencaMax = custoMaxComIRA - custoMaxSemIRA;
 
+
 function result () {
-    nome = input_nome.value;
-    qtd_pacientes = Number(input_qtd_paciente.value);
+    nome = input_nome.value ;
+    qtd_pacientes = input_qtd_internacao.value;
+    tempo_internacao = input_temp_internacao.value;
+    custo_internacao = input_custo_internacao;
 
-    if(qtd_pacientes <= 300){
-        hospital_pequeno();
-    } else if (qtd_pacientes <= 800) {
-        hospital_medio();
-    } else if (qtd_pacientes > 800) {
-        hospital_grande(); 
-    } else {
-        alert(`ERRO! Seu hospital tem que ter pacientes`)
-    }
+    //Grupo de Estudos em CCIH da AHEG
+    riscoMin = 0.05;
+    riscoMax = 0.15;
+  
+    valorTotal = custo_internacao * tempo_internacao;
+    
+    valorMinIRA = custo_internacao * ( tempo_internacao + 2) ; //infecção do trato urinário (ITU), uma das IRAS mais comum e traqnuilas (2 a 4 dias de inetrnaçã o+ custos extras)
+    valorMaxIRA = custo_internacao * ( tempo_internacao + 15) ; //Pneumonia associada à ventilação mecânica (PAV), umas das IRAS mais graves que traz altas taxas de mortalidade e custos (10 a 15+ dias + custos extras)
+
+    custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorTotal;
+    custoMinComIRA = (qtd_pacientes*riscoMin) * valorMinIRA;
+    diferencaMin = custoMinComIRA - custoMinSemIRA;
+
+    custoMaxSemIRA =  (pacienteMax*riscoMax) * valorTotal;
+    custoMaxComIRA = (pacienteMax*riscoMax) * valorMaxIRA;
+    diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+
+  
 }
 
-function hospital_pequeno () {
-    //inserir lógica
-    mensagem();
-
-}
-
-function hospital_medio () {
-    //inserir logica
-    mensagem();
-}
-
-function hospital_grande () {
-    //inserir lógica
-    mensagem();
-
-}
 
 function mensagem () {
     div_msm.innerHTML = `
@@ -124,16 +126,16 @@ function mensagem () {
         <br><br><br>
         SIGNIFICADO EM NÚMEROS:
         <br><br>
-        Redução de ao menos 1 caso de IRAS = <b style="color: green">R$ ${(valorTotalIRA - valorTotal).toFixed(2)}</b> de lucro por mês ou <b style="color: green"> R$ ${((valorTotalIRA - valorTotal) * 12).toFixed(2)}</b> de lucro por ano.
+        Redução de ao menos 1 caso de IRAS = <b style="color: green">R$ ${(valorMinIRA - valorTotal).toFixed(2)}</b> de lucro por mês ou <b style="color: green"> R$ ${((valorMaxIRA - valorTotal) * 12).toFixed(2)}</b> de lucro por ano.
         <br><br>
         Redução de 100% dos casos de IRAS = <b style="color: green"> R$ ${diferencaMax.toFixed(2)}</b> de lucro por mês ou <b style="color: green">R$ ${(diferencaMax * 12).toFixed(2)}</b> de lucro por ano.
         <br><br>
-        <button onclick="mensagem_extra()"> ENTENDER MAIS SOBRE OS NÚMEROS</button>
-        <br><br>
+       
     `
 }
 function mensagem_extra () {
-    div_msm.innerHTML += `
+    div_msm.innerHTML += ` <button onclick="mensagem_extra()"> ENTENDER MAIS SOBRE OS NÚMEROS</button>
+        <br><br>
     Tendo como base um hospital geral de porte Pequeno onde seus dados médios são:<br><br>
         Quantidade de Pacientes por dia: ${qtd_pacientes};
         Variação de contaminação por IRA =  ${riscoMin} a ${riscoMax};<br>

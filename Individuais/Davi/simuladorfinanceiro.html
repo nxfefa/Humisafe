@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Financeiro</title>
+</head>
+<body>
+    <h1>SIMULADOR FINANCEIRO</h1>
+    <br></br>
+
+    <h2> QUAL O NOME DO SEU HOSPITAL?</h2>
+    <input type="text" id="input_nome">
+    <br><br>
+
+    <h2> QUAL A MÉDIA DE PACIENTES PASSAM NO SEU HOSPITAL MêS?</h2>
+    <input type="number" id="input_qtd_paciente">
+    <br><br>
+
+    <button onclick="result()"> VER QUANTO ESTOU PERDENDO</button>
+    <br><br>
+
+    <div id="div_msm"></div>
+
+</body>
+</html>
+
+<script>
+    // define o nome do hospital
+    var nome ='';
+    //dados medios de pacientes em hosp. gerais
+    var qtd_pacientes = 0;
+
+    //dados medios de porcentagem de contaminação por IRA
+    var riscoMin = 0;
+    var riscoMax = 0;
+
+    // calculo de custos sem IRA
+    var custoMedioInternacao = 0
+    var diasMedioInternacao = 0;
+    var valorTotal = custoMedioInternacao * diasMedioInternacao;
+
+    //calculo de custo COM IRA
+    var custoMedioInternacaoIRA = 0;
+    var diasMedioInternacaoIRA = 0;
+    var valorTotalIRA = custoMedioInternacaoIRA * diasMedioInternacaoIRA;
+
+    //calculos de custos minimos com e sem IRA
+    var custoMinSemIRA =  (pacienteMin*riscoMin) * valorTotal;
+    var custoMinComIRA = (pacienteMin*riscoMin) * valorTotalIRA;
+    var diferencaMin = custoMinComIRA -  custoMinSemIRA;
+
+    //calculos de custos máximos com e sem IRA
+    var custoMaxSemIRA =  (pacienteMax*riscoMax) * valorTotal;
+    var custoMaxComIRA = (pacienteMax*riscoMax) * valorTotalIRA;
+    var diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+
+function result () {
+    nome = input_nome.value;
+    qtd_pacientes = Number(input_qtd_paciente.value);
+
+    if(qtd_pacientes <= 300){
+        hospital_pequeno();
+    } else if (qtd_pacientes <= 800) {
+        hospital_medio();
+    } else if (qtd_pacientes > 800) {
+        hospital_grande(); 
+    } else {
+        alert(`ERRO! Seu hospital tem que ter pacientes`)
+    }
+}
+
+function hospital_pequeno () {
+
+    riscoMin = 0.05;
+    riscoMax = 0.15;
+
+    custoMedioInternacao = 800
+    diasMedioInternacao = 5;
+    valorTotal = custoMedioInternacao * diasMedioInternacao;
+
+    custoMedioInternacaoIRA = 1200;
+    diasMedioInternacaoIRA = 10;
+    valorTotalIRA = custoMedioInternacaoIRA * diasMedioInternacaoIRA;
+
+    custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorTotal;
+    custoMinComIRA = (qtd_pacientes*riscoMin) * valorTotalIRA;
+    diferencaMin = custoMinComIRA - custoMinSemIRA;
+
+    custoMaxSemIRA =  (qtd_pacientes*riscoMax) * valorTotal;
+    custoMaxComIRA = (qtd_pacientes*riscoMax) * valorTotalIRA;
+    diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+
+
+    mensagem();
+
+}
+
+function hospital_medio () {
+
+    riscoMin = 0.1;
+    riscoMax = 0.2;
+
+    custoMedioInternacao = 900
+    diasMedioInternacao = 6;
+    valorTotal = custoMedioInternacao * diasMedioInternacao;
+
+    custoMedioInternacaoIRA = 1400;
+    diasMedioInternacaoIRA = 12;
+    valorTotalIRA = custoMedioInternacaoIRA * diasMedioInternacaoIRA;
+
+    custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorTotal;
+    custoMinComIRA = (qtd_pacientes*riscoMin) * valorTotalIRA;
+    diferencaMin = custoMinComIRA - custoMinSemIRA;
+
+    custoMaxSemIRA =  (qtd_pacientes*riscoMax) * valorTotal;
+    custoMaxComIRA = (qtd_pacientes*riscoMax) * valorTotalIRA;
+    diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+
+    mensagem();
+
+}
+
+function hospital_grande () {
+
+    riscoMin = 0.1;
+    riscoMax = 0.25;
+
+    custoMedioInternacao = 1000
+    diasMedioInternacao = 7;
+    valorTotal = custoMedioInternacao * diasMedioInternacao;
+
+    custoMedioInternacaoIRA = 1600;
+    diasMedioInternacaoIRA = 15;
+    valorTotalIRA = custoMedioInternacaoIRA * diasMedioInternacaoIRA;
+
+    custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorTotal;
+    custoMinComIRA = (qtd_pacientes*riscoMin) * valorTotalIRA;
+    diferencaMin = custoMinComIRA - custoMinSemIRA;
+
+    custoMaxSemIRA =  (qtd_pacientes*riscoMax) * valorTotal;
+    custoMaxComIRA = (qtd_pacientes*riscoMax) * valorTotalIRA;
+    diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+
+    mensagem();
+
+}
+
+function mensagem () {
+    div_msm.innerHTML = `
+
+    Com os dados fornecidos pelo Hosptal ${nome}, podemos analisar oque segue:
+    <br><br>
+        ESTATÍSTICAS:
+        <br><br> 
+        Quantidade media de pacientes diarios: ${qtd_pacientes};
+        <br><br>
+        Valores médios gastos em pacientes, internados, <b>sem IRAS</b>, por Mês: R$${custoMinSemIRA.toFixed(2)} a R$${custoMaxSemIRA.toFixed(2)}.
+        <br><br>
+        Valores médios gastos em pacientes, internados, <b>com IRAS</b>, por Mês: R$${custoMinComIRA.toFixed(2)} a R$${custoMaxComIRA.toFixed(2)}.
+        <br><br><br>
+
+        PREJUIZO: 
+        <br><br>
+        Prejuizo mínimo, em dinheiro, que as IRAS podem trazer ao seu hospital <b style="color: red"> R$ ${diferencaMin.toFixed(2)}</b>, por mês.
+        <br><br>
+        Prejuizo máximo, em dinheiro, que as IRAS podem trazer ao seu hospital <b style="color: red">R$ ${diferencaMax.toFixed(2)}</b>, por mês.
+        <br><br><br>
+
+        SOLUÇÃO:
+        <br><br>
+        Com nosso monitoramento inteligente poderemos previnir cerca de 1 caso a 100% dos casos de IRAS por mês.
+        <br><br><br>
+        SIGNIFICADO EM NÚMEROS:
+        <br><br>
+        Redução de ao menos 1 caso de IRAS = <b style="color: green">R$ ${(valorTotalIRA - valorTotal).toFixed(2)}</b> de lucro por mês ou <b style="color: green"> R$ ${((valorTotalIRA - valorTotal) * 12).toFixed(2)}</b> de lucro por ano.
+        <br><br>
+        Redução de 100% dos casos de IRAS = <b style="color: green"> R$ ${diferencaMax.toFixed(2)}</b> de lucro por mês ou <b style="color: green">R$ ${(diferencaMax * 12).toFixed(2)}</b> de lucro por ano.
+        <br><br>
+        <button onclick="mensagem_extra()"> ENTENDER MAIS SOBRE OS NÚMEROS</button>
+        <br><br>
+    `
+}
+function mensagem_extra () {
+    div_msm.innerHTML += `
+        Tendo como base um hospital geral de porte Pequeno onde seus dados médios são:<br><br>
+            Quantidade de Pacientes por dia: ${qtd_pacientes};
+            Variação de contaminação por IRA =  ${riscoMin} a ${riscoMax};<br>
+            media de tempo de internação de um paciente sem IRA = ${diasMedioInternacao};<br>
+            media de tempo de internação de um paciente com IRA = ${diasMedioInternacaoIRA};<br>
+            Custo medio total de um de um paciente internado sem IRA = R$${valorTotal.toFixed(2)};<br>
+            Custo medio total de um de um paciente internado com IRA = R$${valorTotalIRA.toFixed(2)};<br>
+            <br><br><br>
+        Podemos analisar que:<br>
+            Variação de custos de internação, de um paciente sem IRAS é de R$${custoMinSemIRA.toFixed(2)} a R$${custoMaxSemIRA.toFixed(2)};<br>
+            Variação de custos de internação de um paciente com IRAS é de R$${custoMinComIRA.toFixed(2)} a R$${custoMaxComIRA.toFixed(2)};<br>
+            <br><br><br>
+        O que corresponde a um prejuizo que pode variar de R$${diferencaMin.toFixed(2)} a R$${diferencaMax.toFixed(2)};
+    `
+}
+</script>
