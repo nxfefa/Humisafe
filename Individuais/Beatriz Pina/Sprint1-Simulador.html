@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador Financeiro</title>
+  </head>
+  <body>
+    <h1>Simulador Financeiro</h1>
+    <h4>A falta de controle de umidade pode implicar em diversos fatores, como por exemplo afetando a qualidade do ambiente,
+      colaborando para o desenvolvimento de bacterias que podem levar a infecções, as mesmas não iram prejudicar apenas seus pacientes,
+      como tambem seus funcionarios. Pensando nisso A HumiSafe proporciona um eficaz monitoramento de umidade para que você possa ter um bom 
+      controle em seu ambiente, faça agora a simulação de possiveis economias após a utilização do sistema Humi.
+    </h4>
+    Qual o nome do seu hospital?
+    <input type="text" id="input_nome" />
+    <br /><br />
+    Qual a quantidade de pacientes internados?
+    <input type="number" id="input_max" />
+    <br /><br />
+    Qual o custo médio de internação por dia?
+    <input type="number" id="input_inter" />
+    <br /><br />
+    Qual o tempo médio de internação (dias)?
+    <input type="number" id="input_dia" />
+    <br /><br />
+    <button onclick="Calcular()">Calcular</button>
+    <br /><br />
+    <div id="div_mensagem"></div>
+  </body>
+  
+</html>
+<script>
+    function Calcular() {
+      var nome = input_nome.value;
+      var pacientes = Number(input_max.value);
+      var custoDiario = Number (input_inter.value);
+      var dias = Number(input_dia.value);
+
+      // calcular total de gastos
+      var custoTotal = pacientes * custoDiario * dias;
+      // taxa de probabilidade de iras com base em pesquisas
+      var taxaRiscoIRAS = 0.14; // 14% de risco
+      // calcular qauntidade de pacientes com iras
+      var pacientesComIRAS = pacientes * taxaRiscoIRAS;
+      // calcular custo adicional das internações
+      var custoAdicionalIRAS = pacientesComIRAS * custoDiario * dias;
+      // calcular custo total de internação com iras
+      var custoTotalComIRAS = custoTotal + custoAdicionalIRAS;
+      // calcular impacto financeiro das IRAS no hospital
+      var aumentoPercentual = (custoAdicionalIRAS / custoTotal) * pacientes;
+
+      div_mensagem.innerHTML = `
+        <h2>Reduza Custos e Salve Vidas com o <b style = "color:blue">Sistema Humi!</b></h2>
+        <p>O hospital <b>${nome}</b> pode enfrentar desafios financeiros e operacionais devido às Infecções Relacionadas à Assistência à Saúde (IRAS).</p>
+        <p>Atualmente, com <b>${pacientes}</b> pacientes internados, utilizando a multiplicação dos valores inseridos o custo total estimado de internações sem IRAS é de <b>R$ ${custoTotal.toFixed(2)}</b>.</p>
+        <p>Entretanto, com uma taxa de risco de IRAS de 14%, cerca de <b>${pacientesComIRAS.toFixed(0)}</b> dos pacientes internados podem ser afetados, gerando um custo adicional de <b>R$ ${custoAdicionalIRAS.toFixed(2)}</b>.</p>
+        <p>O impacto financeiro é claro: o custo total com IRAS sobe para <b style="color:red">R$ ${custoTotalComIRAS.toFixed(2)}</b>, representando um aumento de <b style="color:red">${aumentoPercentual.toFixed(2)}%</b>.</p>
+        <h3>Como o <b style = "color:blue">Sistema Humi</b> pode ajudar?</h3>
+        <ul> 
+          <li>Monitoramento inteligente da umidade para aumentar o controle e reduzir a possibilidade de casos de IRAS.</li>
+          <li>Alertas em tempo real para ações preventivas.</li>
+          <li>Redução de custos hospitalares e aumento da segurança dos pacientes e funcionarios.</li>
+        </ul>
+        <p><b>Não deixe os custos e riscos das IRAS impactarem seu hospital!</b> O <b style = "color:blue">Sistema Humi</b> está pronto para transformar sua gestão de umidade e saude. Entre em contato e descubra como podemos ajudar.</p>`;
+    } 
+    // ul é para dar um espaço estilo paragrafo, li é para colocar as bolinhas de listagem, .tofixed coloca ponto nos valores
+  </script>
