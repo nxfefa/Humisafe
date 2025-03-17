@@ -9,21 +9,24 @@
     <h1>SIMULADOR FINANCEIRO</h1>
     <br></br>
 
-    <p> A falta de controle de umidade pode implicar em diversos fatores, como por exemplo afetando a qualidade do ambiente, colaborando para o desenvolvimento de bactérias que podem levar a infecções, as mesmas não iram prejudicar apenas seus pacientes, como também seus funcionários. Pensando nisso A HumiSafe proporciona um eficaz monitoramento de umidade para que você possa ter um bom controle em seu ambiente, faça agora a simulação de possíveis economias após a utilização do sistema Humi. </p>
+    <p> A falta de controle de umidade pode implicar em diversos fatores, como, por exemplo, afetar a qualidade do ambiente,colaborar para o 
+        desenvolvimento de bactérias que podem levar a infecções. Estas não prejudicarão apenas seus pacientes, mas também seus funcionários.
+        Pensando nisso, a HumiSafe proporciona um eficaz monitoramento de umidade paraque você possa ter um bom controle em seu ambiente. 
+         Faça agora a simulação de possíveis economias após a utilização do sistema Humi </p>
 
-    <h2> QUAL O NOME DO SEU HOSPITAL?</h2>
+    <h2> Qual o nome do hospital?</h2>
     <input type="text" id="input_nome">
     <br><br>
 
-    <h2> QUAL A MÉDIA DE PACIENTES INTERNADOS NO SEU HOSPITAL HOJE ?</h2>
+    <h2> Qual a média de pacientes internados no hospital hoje?</h2>
     <input type="number" id="input_qtd_internacao">
     <br><br>
 
-    <h2> QUAL O TEMPO MÉDIO DE INTERNAÇÃO ?</h2>
+    <h2> Qual o tempo médio de internação? (Dias)</h2>
     <input type="number" id="input_temp_internacao">
     <br><br>
 
-    <h2> QUAL O CUSTO DIÁRIO MÉDIO DE INTERNAÇÃO ?</h2>
+    <h2> Qual o custo médio de diaria de internação?</h2>
     <input type="number" id="input_custo_internacao">
     <br><br>
 
@@ -36,119 +39,69 @@
 </html>
 
 <script>
-//dados fornecidos
-    // define o nome do hospital
-    var nome ='';
-
-    //dados medios de pacientes em hosp. gerais
-    var qtd_pacientes = 0;
-
-    //dados de internacao
-    var tempo_internacao = 0;
-    var custo_internacao = 0;
-
-
-//dados pesquisados
-    //dados medios de porcentagem de contaminação por IRA
-    var riscoMin = 0;
-    var riscoMax = 0;
-
-
-//dados calculados
-    //calculos de custos com e sem IRAS
-    var valorTotal = custo_internacao * tempo_internacao;
-    var valorMinIRA = custo_internacao * ( tempo_internacao + 2) ; //infecção do trato urinário (ITU), uma das IRAS mais comum e traqnuilas (2 a 4 dias de inetrnação + custos extras)
-    var valorMaxIRA = custo_internacao * ( tempo_internacao + 15) ; //Pneumonia associada à ventilação mecânica (PAV), umas das IRAS mais graves que traz altas taxas de mortalidade e custos (10 a 15+ dias + custos extras)
-
-
-    //calculos de custos minimos com e sem IRA
-    var custoMinSemIRA =  (pacienteMin*riscoMin) * valorTotal;
-    var custoMinComIRA = (pacienteMin*riscoMin) * valorTotalIRA;
-    var diferencaMin = custoMinComIRA -  custoMinSemIRA;
-
-    //calculos de custos máximos com e sem IRA
-    var custoMaxSemIRA =  (pacienteMax*riscoMax) * valorTotal;
-    var custoMaxComIRA = (pacienteMax*riscoMax) * valorTotalIRA;
-    var diferencaMax = custoMaxComIRA - custoMaxSemIRA;
-
 
 function result () {
-    nome = input_nome.value ;
-    qtd_pacientes = input_qtd_internacao.value;
-    tempo_internacao = input_temp_internacao.value;
-    custo_internacao = input_custo_internacao;
+    //define o nome do hospital
+    var nome = input_nome.value;
+
+    //dados medios de pacientes em hosp. gerais
+    var qtd_pacientes = Number(input_qtd_internacao.value);
+
+    //dados de internacao
+    var tempo_internacao = Number(input_temp_internacao.value);
+    var custo_internacao = Number(input_custo_internacao.value);
 
     //Grupo de Estudos em CCIH da AHEG
-    riscoMin = 0.05;
-    riscoMax = 0.15;
-  
-    valorTotal = custo_internacao * tempo_internacao;
-    
-    valorMinIRA = custo_internacao * ( tempo_internacao + 2) ; //infecção do trato urinário (ITU), uma das IRAS mais comum e traqnuilas (2 a 4 dias de inetrnaçã o+ custos extras)
-    valorMaxIRA = custo_internacao * ( tempo_internacao + 15) ; //Pneumonia associada à ventilação mecânica (PAV), umas das IRAS mais graves que traz altas taxas de mortalidade e custos (10 a 15+ dias + custos extras)
+    var riscoMin = 0.05;
+    var riscoMedio = 0.075;
+    var riscoMax = 0.15;
+   
+    //calculos de custos com e sem IRAS de 1 paciente
+    var valorPorPaciente = custo_internacao * tempo_internacao; 
+    var valorMinIRA = custo_internacao * ( tempo_internacao + 2) ; //infecção do trato urinário (ITU), uma das IRAS mais comum e traqnuilas (2 a 4 dias de inetrnaçã o+ custos extras)
+    var valorMaxIRA = custo_internacao * ( tempo_internacao + 15) ; //Pneumonia associada à ventilação mecânica (PAV), umas das IRAS mais graves que traz altas taxas de mortalidade e custos (10 a 15+ dias + custos extras)
+ 
+    //calculos de custos minimos com e sem IRA
+    var custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorPorPaciente;
+    var custoMinComIRA = (qtd_pacientes*riscoMin) * valorMinIRA;
+    var diferencaMin = custoMinComIRA - custoMinSemIRA;
+    var aumentoPercentualmin = ((custoMinComIRA / custoMinSemIRA)*100); 
 
-    custoMinSemIRA =  (qtd_pacientes*riscoMin) * valorTotal;
-    custoMinComIRA = (qtd_pacientes*riscoMin) * valorMinIRA;
-    diferencaMin = custoMinComIRA - custoMinSemIRA;
+    // Calculo de taxa max de 15% reduzida na metade
+    var diferencamedia = (qtd_pacientes*riscoMedio) * valorMaxIRA;
+ 
+    //calculos de custos máximos com e sem IRA
+    var custoMaxSemIRA = (qtd_pacientes*riscoMax) * valorPorPaciente;
+    var custoMaxComIRA = (qtd_pacientes*riscoMax) * valorMaxIRA;
+    var diferencaMax = custoMaxComIRA - custoMaxSemIRA;
+    var aumentoPercentualmax = ((custoMaxComIRA / custoMaxSemIRA) * 100);
 
-    custoMaxSemIRA =  (pacienteMax*riscoMax) * valorTotal;
-    custoMaxComIRA = (pacienteMax*riscoMax) * valorMaxIRA;
-    diferencaMax = custoMaxComIRA - custoMaxSemIRA;
-
-  
-}
-
-
-function mensagem () {
     div_msm.innerHTML = `
 
-    Com os dados fornecidos pelo Hosptal ${nome}, podemos analisar oque segue:
+    <h2>Reduza Custos e Salve Vidas com o <b style = "color:blue">Sistema Humi!</b></h2>
+    Com os dados fornecidos pelo Hosptal <b>${nome}</b>, podemos analisar que
     <br><br>
-        ESTATÍSTICAS:
-        <br><br> 
-        Quantidade media de pacientes diarios: ${qtd_pacientes};
-        <br><br>
-        Valores médios gastos em pacientes, internados, <b>sem IRAS</b>, por Mês: R$${custoMinSemIRA.toFixed(2)} a R$${custoMaxSemIRA.toFixed(2)}.
-        <br><br>
-        Valores médios gastos em pacientes, internados, <b>com IRAS</b>, por Mês: R$${custoMinComIRA.toFixed(2)} a R$${custoMaxComIRA.toFixed(2)}.
-        <br><br><br>
+    <b>ESTATÍSTICAS:</b> <br>
+    Com uma média de ${qtd_pacientes} pacientes internados, os custos com internação <b>sem IRAS</b> são de R$${custoMinSemIRA.toFixed(2)} a R$${custoMaxSemIRA.toFixed(2)}. Considerando que a probabilidade desses pacientes contrairem IRAS são de 5% a 15%  os custos podem variar de R$${custoMinComIRA.toFixed(2)} a R$${custoMaxComIRA.toFixed(2)}, elevando  o valor minimo a <b style="color: red">${aumentoPercentualmin.toFixed(2)}%</b> e o maximo a <b style="color: red">${aumentoPercentualmax.toFixed(2)}%</b> .
+    <br><br> 
 
-        PREJUIZO: 
-        <br><br>
-        Prejuizo mínimo, em dinheiro, que as IRAS podem trazer ao seu hospital <b style="color: red"> R$ ${diferencaMin.toFixed(2)}</b>, por mês.
-        <br><br>
-        Prejuizo máximo, em dinheiro, que as IRAS podem trazer ao seu hospital <b style="color: red">R$ ${diferencaMax.toFixed(2)}</b>, por mês.
-        <br><br><br>
+    PREJUIZO: <br>
+    Prejuizo financeiro mínimo, que IRAS podem trazer ao hospital <b>${nome}</b> é de <b style="color: red"> R$ ${diferencaMin.toFixed(2)}</b>, por mês.
+    <br>
+    Já o Prejuizo financeiro máximo, que IRAS podem trazer é de <b style="color: red">R$ ${diferencaMax.toFixed(2)}</b>, por mês.
+    <br><br>
 
-        SOLUÇÃO:
-        <br><br>
-        Com nosso monitoramento inteligente poderemos previnir cerca de 1 caso a 100% dos casos de IRAS por mês.
-        <br><br><br>
-        SIGNIFICADO EM NÚMEROS:
-        <br><br>
-        Redução de ao menos 1 caso de IRAS = <b style="color: green">R$ ${(valorMinIRA - valorTotal).toFixed(2)}</b> de lucro por mês ou <b style="color: green"> R$ ${((valorMaxIRA - valorTotal) * 12).toFixed(2)}</b> de lucro por ano.
-        <br><br>
-        Redução de 100% dos casos de IRAS = <b style="color: green"> R$ ${diferencaMax.toFixed(2)}</b> de lucro por mês ou <b style="color: green">R$ ${(diferencaMax * 12).toFixed(2)}</b> de lucro por ano.
-        <br><br>
-       
-    `
+    <b>SOLUÇÃO:</b><br>
+    Com o <b style = "color:blue">Sistema Humi</b> de monitoramento inteligente podemos colaborar para sua gestão e prevenção de casos de IRAS,
+    com essa solução temos em vista reduzir a taxa de 15% de casos na metade <b>(7,5%)</b>.
+    <br><br>
+    
+    <b>SIGNIFICADO EM NÚMEROS:<b><br>
+    Redução de ao menos <b>1</b> caso de IRAS = <b style="color: green">R$ ${(valorMinIRA - valorPorPaciente).toFixed(2)}</b> de lucro por mês ou <b style="color: green"> R$ ${((valorMaxIRA - valorPorPaciente) * 12).toFixed(2)}</b> de lucro por ano.
+    <br>
+    Redução de <b>50%</b> dos casos de IRAS = <b style="color: green"> R$ ${diferencamedia.toFixed(2)}</b> de lucro por mês ou <b style="color: green">R$ ${(diferencaMax * 12).toFixed(2)}</b> de lucro por ano.
+    <br>`
 }
-function mensagem_extra () {
-    div_msm.innerHTML += ` <button onclick="mensagem_extra()"> ENTENDER MAIS SOBRE OS NÚMEROS</button>
-        <br><br>
-    Tendo como base um hospital geral de porte Pequeno onde seus dados médios são:<br><br>
-        Quantidade de Pacientes por dia: ${qtd_pacientes};
-        Variação de contaminação por IRA =  ${riscoMin} a ${riscoMax};<br>
-        media de tempo de internação de um paciente sem IRA = ${diasMedioInternacao};<br>
-        media de tempo de internação de um paciente com IRA = ${diasMedioInternacaoIRA};<br>
-        Custo medio total de um de um paciente internado sem IRA = R$${valorTotal.toFixed(2)};<br>
-        Custo medio total de um de um paciente internado com IRA = R$${valorTotalIRA.toFixed(2)};<br>
-        <br><br><br>
-    Podemos analisar que:<br>
-        Variação de custos de internação, de um paciente sem IRAS é de R$${custoMinSemIRA.toFixed(2)} a R$${custoMaxSemIRA.toFixed(2)};<br>
-        Variação de custos de internação de um paciente com IRAS é de R$${custoMinComIRA.toFixed(2)} a R$${custoMaxComIRA.toFixed(2)};<br>
-        <br><br><br>
-    O que corresponde a um prejuizo que pode variar de R$${diferencaMin.toFixed(2)} a R$${diferencaMax.toFixed(2)};
-    `
-}
+
+
 </script>
