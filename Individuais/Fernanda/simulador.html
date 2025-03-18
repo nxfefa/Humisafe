@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <center>
+    <h2>Simulador Financeiro - Economia com Monitoramento</h2> 
+
+    <h3>Insira os valores:</h3><br><br>
+    <h4>Infecções por mês:</h4> 
+    <input type="number" id="input_infeccoes"><br><br>
+
+    <h4>Custo médio por paciente com IRAS (R$):</h4> 
+    <input type="number" id="input_custo_infeccao"><br><br>
+
+    <h4>Custo que pretende investir em sistema de sensores (R$):</h4> 
+    <input type="number" id="input_custo_sistema"><br><br> 
+
+    <button onclick="calcularEconomia()">Calcular Economia</button><br><br>
+
+     <div id="div_mensagem"></div>
+    <center>
+
+  <script> 
+   function calcularEconomia() {   
+   var infeccoes = Number(input_infeccoes.value); 
+   var custoInfeccao = Number(input_custo_infeccao.value); 
+   var custoSistema = Number(input_custo_sistema.value); 
+            
+        
+    if (infeccoes == 0) {
+    alert("Preencha todos os campos corretamente!"); 
+    }  
+    else if (custoInfeccao == 0) {
+    alert("Preencha todos os campos corretamente!");    
+   }
+   else if (custoSistema == 0) { 
+    alert("Preencha todos os campos corretamente!");           
+    } 
+    else {  
+    economiaMensal = infeccoes * custoInfeccao; 
+    economiaAnual = economiaMensal * 12; 
+    retornoInvestimento = custoSistema - economiaMensal ; 
+
+    div_mensagem.innerHTML =`<h4> Com o sistema instalado:</h4>
+<p>- Economia Mensal será: R$  ${economiaMensal}, gerando uma Economia Anual: R$  ${economiaAnual}.</p> 
+<p>- Com o nosso sistema, o índice de casos diminuíra trazendo então um Retorno do Investimento: R$  ${retornoInvestimento}<p>
+<p>- A redução das infecções pode chegar a 70% com monitoramento adequado.</p> 
+<p>- Isso significa que, ao invés de 10 casos mensais, podem ocorrer apenas 3 casos.</p> 
+<h4> Sem o sistema:</h4>
+<p>- Infecções hospitalares são comuns e podem custar em média R$ 30.000 por paciente.</p>
+<p>- Em um hospital com 10 casos por mês, o custo anual pode chegar a R$ 3.600.000.</p>`         
+}
+}
+ </script> 
+
+        
+         
