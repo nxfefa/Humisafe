@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador Humisafe</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #FFE4E1;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        span {
+            color: #DB7093;
+        }
+
+        h3 {
+            font-size: 16px;
+            margin: 10px 0 5px;
+        }
+
+        input {
+            width: 95%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            padding: 12px 3px;
+            background: #DB7093;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 50%;
+        }
+
+        button:hover {
+            box-sizing: 20px #DB7093;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simulação financeira Humi<span>Safe</span></h1>
+
+        <h3>Custo Inicial de Implantação do sensor:</h3>
+        <input id="input_CustoImplantacao" type="number" placeholder="Inserir o custo Inicial de Implantação" required><br><br>
+        
+        <h3>Custos Operacionais:</h3>
+        <input id="input_CustoOperecional" type="number" placeholder="Inserir os custos operacionais" required><br><br>
+
+        <h3>Média de duração de uma internação com IRAS:</h3>
+        <input id="input_CustoMedio" type="number" placeholder="Inserir a média de duração de uma internação" required><br><br>
+        
+        <h3>Custo medio por paciente com IRAS:</h3>
+        <input id="input_CustoPaciente" type="number" placeholder="Inserir o custo medio por paciente com IRAS(R$)" required><br><br>
+
+    
+        <center><button onclick="simulacao()">Fazer Simulação</button><br><br><br></center>
+    
+        <div id="div_mensagem"></div>
+    </div>
+
+</body>
+</html>
+
+<script>
+    function simulacao() {
+        var Custo_Implantação = Number(input_CustoImplantacao.value);
+        var Custo_Operacional = Number(input_CustoOperecional.value);
+        var Custo_Paciente = Number(input_CustoPaciente.value);
+        var Custo_Media = Number(input_CustoMedio.value);
+
+        
+        var economiaMensal = Custo_Paciente + Custo_Media; 
+        var economiaAnual = economiaMensal * 12; 
+        var custos = Custo_Implantação + Custo_Operacional;
+        var retornoInvestimento = custos - economiaMensal ;
+        var gastos = Custo_Paciente * Custo_Media;
+        var lucro = retornoInvestimento + gastos;
+  
+        if (Custo_Implantação == 0) {
+            alert("Preencha todos os campos corretamente!"); 
+        }else if (Custo_Operacional == 0) {
+            alert("Preencha todos os campos corretamente!");    
+        }else if (Custo_Paciente == 0) { 
+            alert("Preencha todos os campos corretamente!");           
+        } else if (Custo_Media == 0) { 
+            alert("Preencha todos os campos corretamente!");           
+        } else {  
+        div_mensagem.innerHTML =`<b>Como o monitoramento de umidade da <span>HumiSafe</span> você terá:</b><br>
+        Investimento inicial: R$ ${custos}<br> 
+        Economia Mensal: R$  ${economiaMensal}<br> 
+        Economia Anual: R$  ${economiaAnual}<br> 
+        Retorno do Investimento: R$  ${retornoInvestimento} <br><br>
+        <b>Nosso sensor trará mudanças significativas para o seu negócio!</b><br>
+        <span style="color:red">Sem o nosso sensor, atualmente você está enfrentando um prejuízo de: R$ ${gastos}</span><br>
+        Então, não perca tempo.  Invista agora e comece a obter o retorno de R$ ${lucro}.`;
+        }     
+} 
+    
+</script>
